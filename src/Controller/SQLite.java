@@ -327,6 +327,7 @@ public class SQLite {
         return product;
     }
 
+
     public boolean authenticateUser(String username, String password) {
         // Hash the entered password
         String hashedPassword = hashPassword(password);
