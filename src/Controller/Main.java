@@ -61,6 +61,9 @@ public class Main {
         sqlite.addUser("client1", "qwerty1234", 2);
         sqlite.addUser("client2", "qwerty1234", 2);
 
+        // test disabled feature
+        sqlite.addUser("disabled", "qwerty1234", 1);
+
 
         // Get users
         ArrayList<History> histories = sqlite.getHistory();

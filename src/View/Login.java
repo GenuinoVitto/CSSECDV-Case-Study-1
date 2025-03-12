@@ -86,18 +86,23 @@ public class Login extends javax.swing.JPanel {
                 .addContainerGap(126, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
-    private void loginBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loginBtnActionPerformed
+    private void loginBtnActionPerformed(java.awt.event.ActionEvent evt) {
         String username = usernameFld.getText();
-        String password = passwordFld.getText(); // You may want to use getPassword() if it's a JPasswordField
+        String password = passwordFld.getText();
 
         SQLite db = new SQLite();
+        int role = db.authenticateUser(username, password);
 
-        if (db.authenticateUser(username, password)) {
-            frame.mainNav(); // Navigate to dashboard if login is successful
-        } else {
+        if (role == -1) {
             JOptionPane.showMessageDialog(this, "Invalid username or password!", "Login Failed", JOptionPane.ERROR_MESSAGE);
+        } else if (role == 1) { // Disabled user
+            JOptionPane.showMessageDialog(this, "Your account has been disabled.", "Access Denied", JOptionPane.ERROR_MESSAGE);
+        } else {
+            frame.setUserRole(role); // Set the role in Frame
+            frame.mainNav();
         }
     }
+
 
 
 

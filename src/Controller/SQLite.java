@@ -145,47 +145,61 @@ public class SQLite {
             System.out.print(ex);
         }
     }
-    
+
     public void addHistory(String username, String name, int stock, String timestamp) {
-        String sql = "INSERT INTO history(username,name,stock,timestamp) VALUES('" + username + "','" + name + "','" + stock + "','" + timestamp + "')";
-        
+        String sql = "INSERT INTO history(username,name,stock,timestamp) VALUES(?, ?, ?, ?)";
+
         try (Connection conn = DriverManager.getConnection(driverURL);
-            Statement stmt = conn.createStatement()){
-            stmt.execute(sql);
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setString(1, username);
+            pstmt.setString(2, name);
+            pstmt.setInt(3, stock);
+            pstmt.setString(4, timestamp);
+            pstmt.executeUpdate();
         } catch (Exception ex) {
             System.out.print(ex);
         }
     }
-    
+
+
     public void addLogs(String event, String username, String desc, String timestamp) {
-        String sql = "INSERT INTO logs(event,username,desc,timestamp) VALUES('" + event + "','" + username + "','" + desc + "','" + timestamp + "')";
-        
+        String sql = "INSERT INTO logs(event, username, desc, timestamp) VALUES(?, ?, ?, ?)";
+
         try (Connection conn = DriverManager.getConnection(driverURL);
-            Statement stmt = conn.createStatement()){
-            stmt.execute(sql);
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setString(1, event);
+            pstmt.setString(2, username);
+            pstmt.setString(3, desc);
+            pstmt.setString(4, timestamp);
+            pstmt.executeUpdate();
         } catch (Exception ex) {
             System.out.print(ex);
         }
     }
-    
+
+
     public void addProduct(String name, int stock, double price) {
-        String sql = "INSERT INTO product(name,stock,price) VALUES('" + name + "','" + stock + "','" + price + "')";
-        
+        String sql = "INSERT INTO product(name, stock, price) VALUES(?, ?, ?)";
+
         try (Connection conn = DriverManager.getConnection(driverURL);
-            Statement stmt = conn.createStatement()){
-            stmt.execute(sql);
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setString(1, name);
+            pstmt.setInt(2, stock);
+            pstmt.setDouble(3, price);
+            pstmt.executeUpdate();
         } catch (Exception ex) {
             System.out.print(ex);
         }
     }
-    
+
+
     public void addUser(String username, String password) {
         String sql = "INSERT INTO users(username,password) VALUES('" + username + "','" + password + "')";
-        
+
         try (Connection conn = DriverManager.getConnection(driverURL);
             Statement stmt = conn.createStatement()){
             stmt.execute(sql);
-            
+
 //      PREPARED STATEMENT EXAMPLE
 //      String sql = "INSERT INTO users(username,password) VALUES(?,?)";
 //      PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -196,8 +210,8 @@ public class SQLite {
             System.out.print(ex);
         }
     }
-    
-    
+
+
     public ArrayList<History> getHistory(){
         String sql = "SELECT id, username, name, stock, timestamp FROM history";
         ArrayList<History> histories = new ArrayList<History>();
@@ -280,47 +294,51 @@ public class SQLite {
     }
 
     public void addUser(String username, String password, int role) {
-        // Hash the password before storing it in the database
         String hashedPassword = hashPassword(password);
 
         String sql = "INSERT INTO users(username, password, role) VALUES(?, ?, ?)";
 
         try (Connection conn = DriverManager.getConnection(driverURL);
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
-
             pstmt.setString(1, username);
-            pstmt.setString(2, hashedPassword); // Store the hashed password
+            pstmt.setString(2, hashedPassword);
             pstmt.setInt(3, role);
-
             pstmt.executeUpdate();
-
         } catch (Exception ex) {
             System.out.print(ex);
         }
     }
 
 
+
     public void removeUser(String username) {
-        String sql = "DELETE FROM users WHERE username='" + username + "';";
+        String sql = "DELETE FROM users WHERE username = ?";
 
         try (Connection conn = DriverManager.getConnection(driverURL);
-            Statement stmt = conn.createStatement()) {
-            stmt.execute(sql);
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setString(1, username);
+            pstmt.executeUpdate();
             System.out.println("User " + username + " has been deleted.");
         } catch (Exception ex) {
             System.out.print(ex);
         }
     }
-    
-    public Product getProduct(String name){
-        String sql = "SELECT name, stock, price FROM product WHERE name='" + name + "';";
+
+
+    public Product getProduct(String name) {
+        String sql = "SELECT name, stock, price FROM product WHERE name = ?";
+
         Product product = null;
         try (Connection conn = DriverManager.getConnection(driverURL);
-            Statement stmt = conn.createStatement();
-            ResultSet rs = stmt.executeQuery(sql)){
-            product = new Product(rs.getString("name"),
-                                   rs.getInt("stock"),
-                                   rs.getFloat("price"));
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setString(1, name);
+            ResultSet rs = pstmt.executeQuery();
+
+            if (rs.next()) {
+                product = new Product(rs.getString("name"),
+                        rs.getInt("stock"),
+                        rs.getFloat("price"));
+            }
         } catch (Exception ex) {
             System.out.print(ex);
         }
@@ -328,28 +346,32 @@ public class SQLite {
     }
 
 
-    public boolean authenticateUser(String username, String password) {
+
+    public int authenticateUser(String username, String password) {
         // Hash the entered password
         String hashedPassword = hashPassword(password);
 
-        String sql = "SELECT * FROM users WHERE username = ? AND password = ?";
+        String sql = "SELECT role FROM users WHERE username = ? AND password = ?";
 
         try (Connection conn = DriverManager.getConnection(driverURL);
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
             pstmt.setString(1, username);
-            pstmt.setString(2, hashedPassword); // Use the hashed password for comparison
+            pstmt.setString(2, hashedPassword);
 
             ResultSet rs = pstmt.executeQuery();
 
-            return rs.next(); // If a record exists, the login is valid
+            if (rs.next()) {
+                return rs.getInt("role"); // Return the role if authentication succeeds
+            }
 
         } catch (Exception ex) {
             System.out.print(ex);
         }
 
-        return false; // Authentication failed
+        return -1; // Return -1 if authentication fails
     }
+
 
     // Hashing password using SHA-256 (this can be kept as is from your User class)
     private String hashPassword(String password) {

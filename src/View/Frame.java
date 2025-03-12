@@ -206,7 +206,8 @@ public class Frame extends javax.swing.JFrame {
     public Main main;
     public Login loginPnl = new Login();
     public Register registerPnl = new Register();
-    
+    private int userRole;
+
     private AdminHome adminHomePnl = new AdminHome();
     private ManagerHome managerHomePnl = new ManagerHome();
     private StaffHome staffHomePnl = new StaffHome();
@@ -214,7 +215,20 @@ public class Frame extends javax.swing.JFrame {
     
     private CardLayout contentView = new CardLayout();
     private CardLayout frameView = new CardLayout();
-    
+
+    private void updateUIBasedOnRole() {
+        adminBtn.setVisible(userRole == 5);
+        managerBtn.setVisible(userRole >= 4);
+        staffBtn.setVisible(userRole >= 3);
+        clientBtn.setVisible(userRole >= 2);
+    }
+
+    public void setUserRole(int role) {
+        this.userRole = role;
+        updateUIBasedOnRole();
+    }
+
+
     public void init(Main controller){
         this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         this.setTitle("CSSECDV - SECURITY Svcs");
@@ -245,6 +259,7 @@ public class Frame extends javax.swing.JFrame {
     }
     
     public void mainNav(){
+        updateUIBasedOnRole(); // Ensure correct visibility before showing home panel
         frameView.show(Container, "homePnl");
     }
     
