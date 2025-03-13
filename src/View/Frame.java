@@ -179,6 +179,30 @@ public class Frame extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    // Add an inactivity timer
+    private static final int INACTIVITY_TIMEOUT = 5 * 60 * 1000; // 5 minutes in milliseconds
+    private Timer inactivityTimer;
+
+    // Method to start the inactivity timer
+    private void startInactivityTimer() {
+        if (inactivityTimer != null) {
+            inactivityTimer.stop();
+        }
+        inactivityTimer = new Timer(INACTIVITY_TIMEOUT, e -> {
+            JOptionPane.showMessageDialog(this, "You have been logged out due to inactivity.", "Session Expired", JOptionPane.WARNING_MESSAGE);
+            logoutBtnActionPerformed(null); // Log out the user
+        });
+        inactivityTimer.setRepeats(false); // Ensure the timer only fires once
+        inactivityTimer.start();
+    }
+
+    // Method to reset the inactivity timer
+    private void resetInactivityTimer() {
+        if (inactivityTimer != null) {
+            inactivityTimer.restart();
+        }
+    }
+
     private void adminBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_adminBtnActionPerformed
         adminHomePnl.showPnl("home");
         contentView.show(Content, "adminHomePnl");
@@ -199,7 +223,10 @@ public class Frame extends javax.swing.JFrame {
         contentView.show(Content, "clientHomePnl");
     }//GEN-LAST:event_clientBtnActionPerformed
 
-    private void logoutBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_logoutBtnActionPerformed
+    private void logoutBtnActionPerformed(java.awt.event.ActionEvent evt) {
+        if (sessionTimer != null) {
+            sessionTimer.stop();
+        }
         frameView.show(Container, "loginPnl");
     }//GEN-LAST:event_logoutBtnActionPerformed
 
@@ -258,8 +285,9 @@ public class Frame extends javax.swing.JFrame {
         this.setVisible(true);
     }
     
-    public void mainNav(){
+    public void mainNav() {
         updateUIBasedOnRole(); // Ensure correct visibility before showing home panel
+        startInactivityTimer(); // Start the inactivity timer
         frameView.show(Container, "homePnl");
     }
     

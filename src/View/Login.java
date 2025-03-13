@@ -91,20 +91,40 @@ public class Login extends javax.swing.JPanel {
         String password = passwordFld.getText();
 
         SQLite db = new SQLite();
+
+        // Check if the account is locked
+        if (db.isAccountLocked(username)) {
+            JOptionPane.showMessageDialog(this, "Your account has been locked due to too many failed attempts. Please try again later.", "Account Locked", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        // Authenticate the user
         int role = db.authenticateUser(username, password);
 
         if (role == -1) {
-            JOptionPane.showMessageDialog(this, "Invalid username or password!", "Login Failed", JOptionPane.ERROR_MESSAGE);
+            // Increment failed login attempts
+            db.incrementFailedAttempts(username);
+
+            // Check if the account is now locked
+            if (db.isAccountLocked(username)) {
+                // Notify the admin
+                db.addLogs("SECURITY", "SYSTEM", "Account locked for user: " + username, new Timestamp(System.currentTimeMillis()).toString());
+
+                JOptionPane.showMessageDialog(this, "Your account has been locked due to too many failed attempts. Please try again later.", "Account Locked", JOptionPane.ERROR_MESSAGE);
+            } else {
+                JOptionPane.showMessageDialog(this, "Invalid username or password!", "Login Failed", JOptionPane.ERROR_MESSAGE);
+            }
         } else if (role == 1) { // Disabled user
             JOptionPane.showMessageDialog(this, "Your account has been disabled.", "Access Denied", JOptionPane.ERROR_MESSAGE);
         } else {
+            // Reset failed attempts on successful login
+            db.resetFailedAttempts(username);
+
             frame.setUserRole(role); // Set the role in Frame
             frame.mainNav();
+            frame.resetInactivityTimer(); // Reset the session timer
         }
     }
-
-
-
 
 
     private void registerBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_registerBtnActionPerformed
