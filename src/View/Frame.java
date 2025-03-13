@@ -5,6 +5,8 @@ import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.Dimension;
 import javax.swing.WindowConstants;
+import javax.swing.JOptionPane;
+import javax.swing.Timer;
 
 public class Frame extends javax.swing.JFrame {
 
@@ -197,7 +199,7 @@ public class Frame extends javax.swing.JFrame {
     }
 
     // Method to reset the inactivity timer
-    private void resetInactivityTimer() {
+    public void resetInactivityTimer() {
         if (inactivityTimer != null) {
             inactivityTimer.restart();
         }
@@ -224,8 +226,8 @@ public class Frame extends javax.swing.JFrame {
     }//GEN-LAST:event_clientBtnActionPerformed
 
     private void logoutBtnActionPerformed(java.awt.event.ActionEvent evt) {
-        if (sessionTimer != null) {
-            sessionTimer.stop();
+        if (inactivityTimer != null) {
+            inactivityTimer.stop();
         }
         frameView.show(Container, "loginPnl");
     }//GEN-LAST:event_logoutBtnActionPerformed

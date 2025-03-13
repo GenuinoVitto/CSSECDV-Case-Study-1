@@ -1,14 +1,14 @@
-
 package View;
 
 import Controller.SQLite;
-
 import javax.swing.*;
+import java.sql.Timestamp;
 
 public class Login extends javax.swing.JPanel {
 
     public Frame frame;
-    
+    private javax.swing.JButton forgotPasswordBtn;
+
     public Login() {
         initComponents();
     }
@@ -70,13 +70,13 @@ public class Login extends javax.swing.JPanel {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap(200, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(usernameFld)
+                    .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(passwordFld, javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(registerBtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(loginBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 178, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(usernameFld)
-                    .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(passwordFld, javax.swing.GroupLayout.Alignment.LEADING))
                     .addComponent(forgotPasswordBtn, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap(200, Short.MAX_VALUE))
         );
@@ -93,10 +93,12 @@ public class Login extends javax.swing.JPanel {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(registerBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(loginBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(forgotPasswordBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(forgotPasswordBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(126, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
+
     private void loginBtnActionPerformed(java.awt.event.ActionEvent evt) {
         String username = usernameFld.getText();
         String password = passwordFld.getText();
@@ -137,15 +139,14 @@ public class Login extends javax.swing.JPanel {
         }
     }
 
-
-    private void registerBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_registerBtnActionPerformed
+    private void registerBtnActionPerformed(java.awt.event.ActionEvent evt) {
         frame.registerNav();
-    }//GEN-LAST:event_registerBtnActionPerformed
+    }
+
     private void forgotPasswordBtnActionPerformed(java.awt.event.ActionEvent evt) {
         // Show an alert dialog
         JOptionPane.showMessageDialog(this, "A link has been sent to your email.", "Forgot Password", JOptionPane.INFORMATION_MESSAGE);
     }
-
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel jLabel1;
