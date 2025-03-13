@@ -22,6 +22,7 @@ public class Login extends javax.swing.JPanel {
         passwordFld = new javax.swing.JPasswordField(); // changed from JTextField();
         registerBtn = new javax.swing.JButton();
         loginBtn = new javax.swing.JButton();
+        forgotPasswordBtn = new javax.swing.JButton();
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 48)); // NOI18N
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -54,6 +55,14 @@ public class Login extends javax.swing.JPanel {
             }
         });
 
+        forgotPasswordBtn.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        forgotPasswordBtn.setText("Forgot Password?");
+        forgotPasswordBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                forgotPasswordBtnActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -68,6 +77,7 @@ public class Login extends javax.swing.JPanel {
                     .addComponent(usernameFld)
                     .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(passwordFld, javax.swing.GroupLayout.Alignment.LEADING))
+                    .addComponent(forgotPasswordBtn, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap(200, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -83,6 +93,7 @@ public class Login extends javax.swing.JPanel {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(registerBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(loginBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(forgotPasswordBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(126, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
@@ -130,6 +141,10 @@ public class Login extends javax.swing.JPanel {
     private void registerBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_registerBtnActionPerformed
         frame.registerNav();
     }//GEN-LAST:event_registerBtnActionPerformed
+    private void forgotPasswordBtnActionPerformed(java.awt.event.ActionEvent evt) {
+        // Show an alert dialog
+        JOptionPane.showMessageDialog(this, "A link has been sent to your email.", "Forgot Password", JOptionPane.INFORMATION_MESSAGE);
+    }
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
