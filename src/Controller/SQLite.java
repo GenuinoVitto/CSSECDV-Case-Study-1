@@ -86,8 +86,8 @@ public class SQLite {
             + " username TEXT NOT NULL UNIQUE,\n"
             + " password TEXT NOT NULL,\n"
             + " role INTEGER DEFAULT 2,\n"
-            + " locked INTEGER DEFAULT 0\n"
-            + " lockout_timestamp TEXT DEFAULT NULL\n"
+            + " locked INTEGER DEFAULT 0,\n"
+            + " lockout_timestamp TEXT \n"
             + ");";
 
         try (Connection conn = DriverManager.getConnection(driverURL);
