@@ -390,47 +390,51 @@ public class SQLite {
     }
 
 
-    // Method to increment failed login attempts
+    // Method to increment failed login attempts and update lockout timestamp
     public void incrementFailedAttempts(String username) {
-        String sql = "UPDATE users SET locked = locked + 1 WHERE username = ?";
+        String sql = "UPDATE users SET locked = locked + 1, lockout_timestamp = ? WHERE username = ?";
         
         try (Connection conn = DriverManager.getConnection(driverURL);
             PreparedStatement pstmt = conn.prepareStatement(sql)) {
-            pstmt.setString(1, username);
+
+            long currentTime = System.currentTimeMillis(); // Get current time in milliseconds
+            pstmt.setString(1, String.valueOf(currentTime)); // Store it as a string
+            pstmt.setString(2, username);
             pstmt.executeUpdate();
+            
         } catch (Exception ex) {
             System.out.print(ex);
         }
     }
 
-    // Method to check if an account is locked
+    // Method to check if an account is locked and unlock if expired
     public boolean isAccountLocked(String username) {
         String sql = "SELECT locked, lockout_timestamp FROM users WHERE username = ?";
         
         try (Connection conn = DriverManager.getConnection(driverURL);
             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            
             pstmt.setString(1, username);
             ResultSet rs = pstmt.executeQuery();
+
             if (rs.next()) {
                 int locked = rs.getInt("locked");
                 String lockoutTimestamp = rs.getString("lockout_timestamp");
 
-                if (locked >= 3) {
-                    // Check if the lockout period has expired (e.g., 5 minutes)
-                    if (lockoutTimestamp != null) {
-                        long lockoutTime = Long.parseLong(lockoutTimestamp);
-                        long currentTime = System.currentTimeMillis();
-                        long lockoutDuration = 5 * 60 * 1000; // 5 minutes
+                if (locked >= 3 && lockoutTimestamp != null) {
+                    long lockoutTime = Long.parseLong(lockoutTimestamp);
+                    long currentTime = System.currentTimeMillis();
+                    long lockoutDuration = 5 * 60 * 1000; // 5 minutes
 
-                        if (currentTime - lockoutTime < lockoutDuration) {
-                            return true; // Account is still locked
-                        } else {
-                            // Unlock the account
-                            resetFailedAttempts(username);
-                            return false;
-                        }
+                    if (currentTime - lockoutTime >= lockoutDuration) {
+                        // Unlock the account if 5 minutes have passed
+                        System.out.println("Unlocking account for user: " + username);
+                        resetFailedAttempts(username);
+                        return false; // Account is now unlocked
+                    } else {
+                        System.out.println("Account still locked: " + username);
+                        return true; // Account is still locked
                     }
-                    return true; // Account is locked
                 }
             }
         } catch (Exception ex) {
@@ -439,14 +443,16 @@ public class SQLite {
         return false;
     }
 
-    // Method to reset failed attempts on successful login
+    // Method to fully unlock an account
     public void resetFailedAttempts(String username) {
         String sql = "UPDATE users SET locked = 0, lockout_timestamp = NULL WHERE username = ?";
         
         try (Connection conn = DriverManager.getConnection(driverURL);
             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            
             pstmt.setString(1, username);
             pstmt.executeUpdate();
+            
         } catch (Exception ex) {
             System.out.print(ex);
         }
