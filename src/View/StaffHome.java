@@ -40,14 +40,17 @@ public class StaffHome extends javax.swing.JPanel {
     
         Content.setLayout(contentView);
         Content.add(new Home("WELCOME STAFF!", new java.awt.Color(0,204,102)), "home");
-        Content.add(mgmtUser, "mgmtUser");
-        Content.add(mgmtHistory, "mgmtHistory");
+        
+        // Staff can manage products and view client users
         Content.add(mgmtProduct, "mgmtProduct");
-        Content.add(mgmtLogs, "mgmtLogs");
+        Content.add(mgmtUser, "mgmtUser");
+        
+        // Content.add(mgmtHistory, "mgmtHistory");
+        // Content.add(mgmtLogs, "mgmtLogs");
         
 //        UNCOMMENT TO DISABLE BUTTONS
         historyBtn.setVisible(false);
-        usersBtn.setVisible(false);
+//        usersBtn.setVisible(false);
 //        productsBtn.setVisible(false);
         logsBtn.setVisible(false);
     }

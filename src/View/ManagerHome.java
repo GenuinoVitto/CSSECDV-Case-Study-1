@@ -40,10 +40,13 @@ public class ManagerHome extends javax.swing.JPanel {
     
         Content.setLayout(contentView);
         Content.add(new Home("WELCOME MANAGER!", new java.awt.Color(153,102,255)), "home");
-        Content.add(mgmtUser, "mgmtUser");
-        Content.add(mgmtHistory, "mgmtHistory");
+        
+        // Manager can manage products, view all history, and view client/staff users
         Content.add(mgmtProduct, "mgmtProduct");
-        Content.add(mgmtLogs, "mgmtLogs");
+        Content.add(mgmtHistory, "mgmtHistory");
+        Content.add(mgmtUser, "mgmtUser");
+        
+        // Content.add(mgmtLogs, "mgmtLogs");
         
 //        UNCOMMENT TO DISABLE BUTTONS
 //        historyBtn.setVisible(false);

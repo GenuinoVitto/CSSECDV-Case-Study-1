@@ -40,10 +40,13 @@ public class AdminHome extends javax.swing.JPanel {
         
         Content.setLayout(contentView);
         Content.add(new Home("WELCOME ADMIN!", new java.awt.Color(51, 153, 255)), "home");
-        Content.add(this.mgmtUser, "mgmtUser");
-        Content.add(this.mgmtHistory, "mgmtHistory");
-        Content.add(this.mgmtProduct, "mgmtProduct");
-        Content.add(this.mgmtLogs, "mgmtLogs");
+        
+        // Admin can manage users and view logs
+        Content.add(mgmtUser, "mgmtUser");
+        Content.add(mgmtLogs, "mgmtLogs");
+        
+        // Content.add(this.mgmtHistory, "mgmtHistory");
+        // Content.add(this.mgmtProduct, "mgmtProduct");
         
 //        UNCOMMENT TO DISABLE BUTTONS
         historyBtn.setVisible(false);

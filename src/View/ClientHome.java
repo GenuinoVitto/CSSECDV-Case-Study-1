@@ -40,16 +40,23 @@ public class ClientHome extends javax.swing.JPanel {
     
         Content.setLayout(contentView);
         Content.add(new Home("WELCOME CLIENT!", new java.awt.Color(255,102,51)), "home");
-        Content.add(mgmtUser, "mgmtUser");
-        Content.add(mgmtHistory, "mgmtHistory");
-        Content.add(mgmtProduct, "mgmtProduct");
-        Content.add(mgmtLogs, "mgmtLogs");
         
-//        UNCOMMENT TO DISABLE BUTTONS
-//        historyBtn.setVisible(false);
-        usersBtn.setVisible(false); // client cannot access users and logs tab
-//        productsBtn.setVisible(false);
+        // Client can only view products and own history
+        Content.add(mgmtProduct, "mgmtProduct");
+        Content.add(mgmtHistory, "mgmtHistory");
+        
+        
+        // Content.add(mgmtUser, "mgmtUser");
+        // Content.add(mgmtLogs, "mgmtLogs");
+
+        // Disable unauthorized buttons
+        usersBtn.setVisible(false);
         logsBtn.setVisible(false);
+    
+                
+        // UNCOMMENT TO DISABLE BUTTONS
+        // historyBtn.setVisible(false);
+        // productsBtn.setVisible(false);
     }
     
     public void showPnl(String panelName){
