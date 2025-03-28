@@ -290,7 +290,18 @@ public class Frame extends javax.swing.JFrame {
     public void mainNav() {
         updateUIBasedOnRole(); // Ensure correct visibility before showing home panel
         startInactivityTimer(); // Start the inactivity timer
-        frameView.show(Container, "homePnl");
+        // Display the correct home panel based on the user role
+        if (userRole == 5) {
+            contentView.show(Content, "adminHomePnl");
+        } else if (userRole == 4) {
+            contentView.show(Content, "managerHomePnl");
+        } else if (userRole == 3) {
+            contentView.show(Content, "staffHomePnl");
+        } else if (userRole == 2) {
+            contentView.show(Content, "clientHomePnl");
+        }
+
+        frameView.show(Container, "homePnl"); // Ensure home panel is displayed
     }
     
     public void loginNav(){
